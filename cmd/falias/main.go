@@ -190,7 +190,7 @@ func listThemes() {
 		cfg = config.DefaultConfig()
 	}
 
-	fmt.Println("Available themes:\n")
+	fmt.Println("Available themes:")
 
 	themes := config.GetAvailableThemes()
 	for _, name := range themes {
