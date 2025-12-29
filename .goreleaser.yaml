@@ -1,0 +1,48 @@
+project_name: falias
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    main: ./cmd/falias
+    binary: falias
+    ldflags:
+      - -s -w
+
+archives:
+  - format: tar.gz
+    name_template: >-
+      {{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}
+
+brews:
+  - name: falias
+    repository:
+      owner: OscarRG
+      name: homebrew-tap
+      token: '{{ .Env.GITHUB_TOKEN }}'
+    directory: Formula
+    description: 'Fast alias discovery and management tool for bash/zsh'
+    homepage: 'https://github.com/OscarRG/falias'
+    license: 'MIT'
+    install: |
+      bin.install "falias"
+    test: |
+      system "#{bin}/falias", "--version"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
